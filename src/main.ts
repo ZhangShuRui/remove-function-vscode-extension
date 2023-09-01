@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import traverse from "@babel/traverse";
+import traverse, { NodePath } from "@babel/traverse";
 import { FunctionNode } from "./interface";
 
 export function getFunctionNode(
@@ -20,7 +20,38 @@ export function getFunctionNode(
         };
       }
     },
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    ArrowFunctionExpression(path) {
+      const variableDeclarationPath = path.parentPath.parentPath;
+
+      if (!variableDeclarationPath) {
+        return;
+      }
+
+      if (variableDeclarationPath.isVariableDeclaration()) {
+        if (
+          index >= variableDeclarationPath.node.start! &&
+          index <= variableDeclarationPath.node.end!
+        ) {
+          functionNode = {
+            name: getArrowFunctionName(path),
+            start: variableDeclarationPath.node.loc?.start,
+            end: variableDeclarationPath.node.loc?.end!,
+          };
+        }
+      }
+    },
   });
 
   return functionNode;
+}
+
+function getArrowFunctionName(path: NodePath) {
+  const parentPath = path.parentPath;
+  if (!parentPath) {
+    return;
+  }
+
+  return Object.keys(parentPath.getBindingIdentifiers())[0];
 }
