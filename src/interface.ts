@@ -2,12 +2,12 @@ export interface FunctionNode {
   name: string;
   start: {
     line: number;
-    colume: number;
+    column: number;
     index: number;
   };
   end: {
     line: number;
-    colume: number;
+    column: number;
     index: number;
   };
 }

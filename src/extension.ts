@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
       const code = editor.document.getText();
       const cursorIndex = editor.document.offsetAt(editor.selection.active);
       const functionNode = getFunctionNode(code, cursorIndex);
-
+      console.log('%c [ extension.ts ---> functionNode ]: ', 'color: blue;', functionNode);
       if (!functionNode) {
         return;
       }
@@ -23,11 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
           new vscode.Range(
             new vscode.Position(
               functionNode?.start.line - 1,
-              functionNode?.start.colume
+              functionNode?.start.column
             ),
             new vscode.Position(
               functionNode?.end.line,
-              functionNode?.end.colume
+              functionNode?.end.column
             )
           )
         );
