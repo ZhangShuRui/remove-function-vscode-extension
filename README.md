@@ -1,3 +1,3 @@
 # remove-function-vscode-extension
 
-移除光标所在的函数
+This is a vscode plugin to remove the current cursor method
